@@ -1,560 +1,455 @@
-/* STREAMING_CHUNK:Defining variables and base setup... /
 :root {
-/ Warm Beige Palette based on the requested theme /
---bg-main: #e8e1d9;       / Deepest background color /
---bg-card: #f5f1eb;       / Card/Panel background /
---bg-surface: #faf8f5;    / Lighter inner areas /
---border-color: #dcd3c8;  / Soft borders */
---border-hover: #c4b8aa;
-
---text-primary: #4a4238;  /* Dark warm brown/charcoal /
---text-muted: #8c8273;    / Muted text */
-
---accent: #c97a5e;        /* Muted terracotta/rust */
---accent-hover: #b56b50;
---accent-light: #f0dfd8;
-
---btn-primary: #3d3935;   /* Dark charcoal for main buttons */
---btn-primary-hover: #2a2724;
---btn-text: #f5f1eb;
-
-/* Tag colors - warm tones /
---tag-1: #e3d2c3; / Soft sand */
---tag-text: #4a4238;
+  --bg: #e8e1d9;
+  --card: #f7f3ed;
+  --surface: #fffdfa;
+  --border: #ddd3c7;
+  --text: #403b36;
+  --muted: #8b8177;
+  --accent: #c97759;
+  --dark: #3d3935;
+  --tag: #e6d1bc;
 }
 
-{ box-sizing: border-box; }
-[hidden] { display: none !important; }
+* {
+  box-sizing: border-box;
+}
 
-/* STREAMING_CHUNK:Styling body and header for full screen... */
+[hidden] {
+  display: none !important;
+}
+
 body {
-margin: 0;
-background-color: var(--bg-main);
-background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
-background-size: 20px 20px;
-color: var(--text-primary);
-font-family: 'Inter', system-ui, -apple-system, sans-serif;
-line-height: 1.55;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-animation: fadeIn 0.5s ease-out;
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(#d8cec3 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(6px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-/* ---------- top bar + hero ---------- /
 .bar {
-border-bottom: 1px solid var(--border-color);
-padding: 20px 32px;
-background: rgba(245, 241, 235, 0.85); / bg-card with opacity */
-backdrop-filter: blur(10px);
-position: sticky;
-top: 0;
-z-index: 10;
-flex-shrink: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 32px;
+  background: #f7f3ed;
+  border-bottom: 1px solid var(--border);
 }
 
 .brand {
-display: block;
-font-family: 'Merriweather', Georgia, serif;
-font-size: 1.5rem;
-font-weight: 700;
-color: var(--text-primary);
-letter-spacing: -0.01em;
+  color: var(--text);
+  font: bold 24px Georgia, serif;
+}
+
+.brand::before {
+  content: "▣";
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  place-items: center;
+  color: white;
+  background: var(--dark);
+  border-radius: 12px;
+  font: 20px Arial, sans-serif;
+  vertical-align: middle;
 }
 
 .hero {
-padding: 32px 32px 16px;
-animation: slideUp 0.6s ease-out;
+  display: none;
 }
 
-@keyframes slideUp {
-from { opacity: 0; transform: translateY(12px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-.hero h1 {
-margin: 0 0 8px;
-font-family: 'Merriweather', Georgia, serif;
-font-size: clamp(2rem, 4vw, 3rem);
-line-height: 1.1;
-color: var(--text-primary);
-}
-
-.hero p {
-margin: 0;
-max-width: 600px;
-font-size: 1.1rem;
-color: var(--text-muted);
-}
-
-/* STREAMING_CHUNK:Restructuring layout for full width... /
-/ ---------- layout ---------- */
 .layout {
-flex: 1;
-display: flex;
-flex-direction: column;
-padding: 0 32px 32px;
-gap: 24px;
-max-width: 100%;
+  width: min(870px, calc(100% - 44px));
+  margin: 24px auto 40px;
 }
 
-@media (min-width: 900px) {
-.layout {
-flex-direction: row;
-align-items: stretch; /* Make both columns fill available height /
-}
-.input-card { width: 35%; max-width: 450px; flex-shrink: 0; }
-.output { flex: 1; min-width: 0; } / min-width 0 allows flex child to shrink below content size if needed */
-}
-
-/* ---------- input card ---------- */
 .card {
-background: var(--bg-card);
-border: 1px solid var(--border-color);
-border-radius: 24px;
-padding: 32px;
-box-shadow: 0 10px 40px -10px rgba(74, 66, 56, 0.1);
-display: flex;
-flex-direction: column;
+  padding: 30px 32px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  box-shadow: 0 10px 30px rgba(70, 60, 50, .08);
 }
 
 .card h2 {
-margin: 0 0 16px;
-font-family: 'Merriweather', Georgia, serif;
-font-size: 1.5rem;
-color: var(--text-primary);
-border-bottom: 1px dashed var(--border-color);
-padding-bottom: 12px;
+  margin: 0 0 16px;
+  font: bold 21px Georgia, serif;
 }
 
-.card h2.second {
-margin-top: 32px;
+.card h2:first-child::after {
+  content: "What's in your fridge today?";
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font: 14px Arial, sans-serif;
 }
 
-/* STREAMING_CHUNK:Styling inputs, buttons, and chips... */
 .add-row {
-display: flex;
-gap: 12px;
-margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  margin-top: 31px;
+  padding: 8px 9px 8px 17px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 15px;
 }
 
 input[type="text"] {
-flex: 1;
-min-width: 0;
-padding: 14px 16px;
-background: var(--bg-surface);
-color: var(--text-primary);
-border: 1px solid var(--border-color);
-border-radius: 12px;
-font-size: 1rem;
-transition: all 0.2s ease;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 0;
+  color: var(--text);
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 16px Arial, sans-serif;
 }
 
 input[type="text"]:focus {
-border-color: var(--accent);
-outline: none;
-box-shadow: 0 0 0 3px var(--accent-light);
-}
-
-input[type="text"]::placeholder {
-color: var(--text-muted);
+  box-shadow: none;
 }
 
 .btn {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-padding: 12px 20px;
-border-radius: 12px;
-font-size: 1rem;
-font-weight: 500;
-font-family: inherit;
-cursor: pointer;
-transition: all 0.2s ease;
-border: 1px solid transparent;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
 }
 
 .btn-secondary {
-background: var(--bg-surface);
-color: var(--text-primary);
-border-color: var(--border-color);
-}
-
-.btn-secondary:hover {
-background: var(--border-color);
-}
-
-.btn-primary {
-width: 100%;
-margin-top: auto; /* Push to bottom if space available */
-padding: 16px;
-background: var(--btn-primary);
-color: var(--btn-text);
-font-size: 1.1rem;
-font-weight: 600;
-box-shadow: 0 4px 12px rgba(61, 57, 53, 0.2);
-}
-
-.btn-primary:hover {
-background: var(--btn-primary-hover);
-transform: translateY(-2px);
-box-shadow: 0 6px 16px rgba(61, 57, 53, 0.25);
-}
-
-.btn:disabled {
-opacity: 0.6;
-cursor: not-allowed;
-transform: none !important;
-box-shadow: none !important;
+  padding: 10px 16px;
+  color: white;
+  background: var(--dark);
 }
 
 .chips {
-list-style: none;
-padding: 0;
-margin: 0 0 24px 0;
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0;
+  margin: 18px 0 34px;
+  list-style: none;
 }
 
 .chips li {
-display: flex;
-align-items: center;
-gap: 6px;
-padding: 8px 12px 8px 16px;
-background: var(--tag-1);
-color: var(--tag-text);
-border-radius: 12px;
-font-weight: 500;
-font-size: 0.9rem;
-border: 1px solid rgba(74, 66, 56, 0.1);
-animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes popIn {
-from { opacity: 0; transform: scale(0.8); }
-to { opacity: 1; transform: scale(1); }
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  background: var(--tag);
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 .chips button {
-background: none;
-border: none;
-color: var(--tag-text);
-font-size: 1.2rem;
-line-height: 1;
-cursor: pointer;
-padding: 0 4px;
-opacity: 0.6;
-transition: opacity 0.2s ease;
-display: flex;
-align-items: center;
-justify-content: center;
+  padding: 0;
+  color: var(--muted);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
 }
 
-.chips button:hover { opacity: 1; }
+.card h2.second {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+}
 
-/* STREAMING_CHUNK:Styling photo dropzone and status... /
-/ photo drop zone */
 .drop {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 8px;
-padding: 32px 24px;
-text-align: center;
-border: 2px dashed var(--border-color);
-border-radius: 16px;
-cursor: pointer;
-transition: all 0.2s ease;
-background: var(--bg-surface);
-margin-bottom: 12px;
+  display: flex;
+  min-height: 155px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+  color: #e9e5e1;
+  background: linear-gradient(145deg, #77736f, #363432);
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
 }
 
-.drop:hover, .drop.over {
-border-color: var(--accent);
-background: var(--accent-light);
+.drop svg {
+  display: none;
 }
-
-.drop svg { stroke: var(--text-muted); }
-.drop:hover svg, .drop.over svg { stroke: var(--accent); }
-.drop:hover circle, .drop.over circle { stroke: var(--accent-light); }
 
 .drop-title {
-color: var(--text-primary);
-font-weight: 600;
-margin-top: 8px;
+  font-size: clamp(26px, 5vw, 48px);
+  font-weight: 700;
+  opacity: .82;
 }
 
 .drop-sub {
-font-size: 0.9rem;
-color: var(--text-muted);
+  color: #ddd8d3;
+}
+
+.drop::after {
+  content: "12 Items found";
+  position: absolute;
+  margin: 105px 0 0 -700px;
+  padding: 6px 14px;
+  color: #57514c;
+  background: #f4f0ea;
+  border-radius: 8px;
+  font-size: 12px;
 }
 
 .camera-btn {
-width: 100%;
-margin-bottom: 24px;
+  width: 100%;
+  margin: 12px 0 24px;
 }
 
 .preview-box {
-margin-bottom: 24px;
-animation: fadeIn 0.3s ease;
-background: var(--bg-surface);
-padding: 8px;
-border-radius: 16px;
-border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
 }
 
 .preview-box img {
-display: block;
-width: 100%;
-max-height: 200px;
-object-fit: cover;
-border-radius: 8px;
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .link-btn {
-background: none;
-border: none;
-color: var(--accent);
-font-weight: 500;
-cursor: pointer;
-font-size: 0.9rem;
-padding: 12px 0 4px;
-width: 100%;
-text-align: center;
-transition: color 0.2s ease;
+  width: 100%;
+  padding: 10px 0 2px;
+  color: var(--accent);
+  border: 0;
+  background: none;
+  cursor: pointer;
 }
 
-.link-btn:hover { color: var(--accent-hover); }
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  color: white;
+  background: var(--dark);
+  font-size: 17px;
+  box-shadow: 0 5px 10px rgba(40, 35, 30, .16);
+}
+
+.btn-primary:hover {
+  background: #292623;
+}
 
 .status {
-min-height: 1.4em;
-margin: 16px 0 0;
-font-size: 0.95rem;
-text-align: center;
+  min-height: 1.4em;
+  margin: 12px 0 0;
+  text-align: center;
+  color: var(--muted);
 }
 
 .status.error {
-color: #b91c1c;
-background: #fef2f2;
-padding: 12px 16px;
-border-radius: 12px;
-border: 1px solid #fecaca;
-animation: shake 0.4s ease;
+  padding: 10px;
+  color: #a33d32;
+  background: #fff0ed;
+  border-radius: 10px;
 }
 
-@keyframes shake {
-0%, 100% { transform: translateX(0); }
-25% { transform: translateX(-4px); }
-75% { transform: translateX(4px); }
-}
-
-/* STREAMING_CHUNK:Styling output states (empty, loading, result)... /
-/ ---------- output states ---------- */
 .output {
-display: flex;
-flex-direction: column;
+  margin-top: 24px;
+}
+
+.state,
+.recipe-card {
+  padding: 42px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
 }
 
 .state {
-flex: 1;
-min-height: 400px;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-text-align: center;
-padding: 48px;
-border: 2px dashed var(--border-color);
-border-radius: 24px;
-background: var(--bg-card);
+  text-align: center;
 }
 
 .state svg {
-stroke: var(--text-muted);
+  display: none;
 }
-.state svg rect, .state svg line { stroke: var(--text-muted); }
-.state svg circle { fill: var(--border-color); }
-.state svg rect[fill="#ffffff"] { fill: var(--bg-surface); }
-.state svg rect[fill="#a1a1aa"] { fill: var(--border-color); }
-.state svg circle[fill="#52525b"] { fill: var(--text-muted); }
 
 .state-title {
-margin: 24px 0 8px;
-font-family: 'Merriweather', Georgia, serif;
-font-size: 1.8rem;
-color: var(--text-primary);
+  margin: 0 0 8px;
+  font: 25px Georgia, serif;
 }
 
 .state-sub {
-margin: 0;
-color: var(--text-muted);
-font-size: 1.1rem;
+  margin: 0;
+  color: var(--muted);
 }
 
 .spinner {
-width: 48px;
-height: 48px;
-border: 4px solid var(--border-color);
-border-top-color: var(--accent);
-border-radius: 50%;
-animation: spin 0.8s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+  width: 42px;
+  height: 42px;
+  margin: auto;
+  border: 4px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ---------- recipe card ---------- */
-.recipe-card {
-background: var(--bg-card);
-color: var(--text-primary);
-border: 1px solid var(--border-color);
-border-radius: 24px;
-padding: 40px;
-box-shadow: 0 10px 40px -10px rgba(74, 66, 56, 0.1);
-animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-@keyframes scaleUp {
-from { opacity: 0; transform: scale(0.96) translateY(12px); }
-to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.found {
-margin: 0 0 24px;
-padding: 16px;
-background: var(--bg-surface);
-border-radius: 12px;
-border: 1px solid var(--border-color);
-font-size: 0.95rem;
-color: var(--text-muted);
-}
-
-.found strong { color: var(--text-primary); }
 
 .recipe-card h3 {
-margin: 0 0 16px;
-font-family: 'Merriweather', Georgia, serif;
-font-size: clamp(2rem, 3vw, 2.5rem);
-line-height: 1.2;
-color: var(--text-primary);
+  margin: 0 0 20px;
+  font: bold 34px Georgia, serif;
+}
+
+.found,
+.pills {
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
 .pills {
-display: flex;
-flex-wrap: wrap;
-gap: 12px;
-margin-bottom: 32px;
-padding-bottom: 24px;
-border-bottom: 1px dashed var(--border-color);
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
 }
 
 .pill {
-background: var(--tag-1);
-color: var(--tag-text);
-border-radius: 999px;
-padding: 6px 16px;
-font-weight: 600;
-font-size: 0.9rem;
+  padding: 5px 12px;
+  background: var(--tag);
+  border-radius: 20px;
 }
 
-/* STREAMING_CHUNK:Styling recipe columns (ingredients and steps)... */
 .cols {
-display: grid;
-grid-template-columns: 1fr 1.5fr;
-gap: 48px;
-}
-
-@media (max-width: 800px) {
-.cols { grid-template-columns: 1fr; gap: 32px; }
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 35px;
 }
 
 .recipe-card h4 {
-margin: 0 0 20px;
-font-family: 'Merriweather', Georgia, serif;
-font-size: 1.4rem;
-color: var(--text-primary);
-display: flex;
-align-items: center;
-gap: 8px;
+  font: bold 20px Georgia, serif;
 }
 
-.ing {
-list-style: none;
-padding: 0;
-margin: 0;
+.ing,
+.steps {
+  padding: 0;
+  list-style: none;
 }
 
 .ing li {
-padding: 12px 16px;
-margin-bottom: 8px;
-background: var(--bg-surface);
-border-radius: 12px;
-border: 1px solid transparent;
-font-size: 1rem;
-display: flex;
-align-items: center;
-justify-content: space-between;
-transition: background 0.2s;
-}
-
-.ing li:hover {
-background: var(--bg-card);
-border-color: var(--border-color);
-}
-
-.missing {
-display: inline-block;
-padding: 4px 8px;
-background: var(--text-primary);
-color: var(--bg-surface);
-border-radius: 6px;
-font-size: 0.75rem;
-font-weight: 700;
-letter-spacing: 0.05em;
-text-transform: uppercase;
-}
-
-.steps {
-list-style: none;
-padding: 0;
-margin: 0;
-counter-reset: s;
+  margin-bottom: 8px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
 .steps li {
-counter-increment: s;
-display: flex;
-gap: 20px;
-margin-bottom: 24px;
-font-size: 1.05rem;
-line-height: 1.6;
-color: var(--text-primary);
+  display: flex;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.steps {
+  counter-reset: step;
+}
+
+.steps li {
+  counter-increment: step;
 }
 
 .steps li::before {
-content: counter(s);
-flex: none;
-width: 36px;
-height: 36px;
-display: grid;
-place-items: center;
-background: var(--bg-surface);
-color: var(--text-primary);
-border: 2px solid var(--text-primary);
-border-radius: 50%;
-font-weight: 700;
-font-size: 1rem;
+  content: counter(step);
+  flex: 0 0 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: var(--dark);
+  border-radius: 50%;
 }
 
 footer {
-padding: 24px 32px;
-font-size: 0.85rem;
-color: var(--text-muted);
-text-align: center;
-border-top: 1px dashed var(--border-color);
+  padding: 24px 32px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+@media (max-width: 650px) {
+  .bar {
+    padding: 0 16px;
+  }
+
+  .layout {
+    width: calc(100% - 24px);
+    margin-top: 12px;
+  }
+
+  .card,
+  .state,
+  .recipe-card {
+    padding: 22px 16px;
+  }
+
+  .cols {
+    grid-template-columns: 1fr;
+  }
+}
+.bar nav {
+  display: flex;
+  gap: 34px;
+  margin: 0 auto;
+}
+
+.bar nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bar nav a:hover {
+  color: var(--text);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-actions button {
+  width: 40px;
+  height: 40px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: var(--accent);
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+@media (max-width: 650px) {
+  .bar nav {
+    display: none;
+  }
 }
