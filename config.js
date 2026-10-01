@@ -1,0 +1,1 @@
+const GEMINI_API_URL_CONFIG = "https://mlh-gemini-proxy.YOUR-CLOUDFLARE-SUBDOMAIN.workers.dev/api/generate";
