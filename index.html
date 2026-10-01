@@ -4,11 +4,595 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Fridge to Meal</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Modernized Studio Dark Palette & Typography Variables */
+    :root {
+      --bg-main: #09090b;
+      --bg-card: #141417;
+      --bg-card-hover: #18181c;
+      --border-color: #27272a;
+      --border-hover: #3f3f46;
+      --text-primary: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --accent: #ffffff;
+      --accent-hover: #e4e4e7;
+      --accent-glow: rgba(255, 255, 255, 0.08);
+      --card-bg: #f8f8f8;
+      --card-text: #09090b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* Body and keyframe animations */
+    body {
+      margin: 0;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+      animation: fadeIn 0.5s ease-out;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header and navigation bar */
+    .bar {
+      border-bottom: 1px solid var(--border-color);
+      padding: 18px 24px;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-icon {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Hero section and typography */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px 12px;
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 52ch;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Grid layout and responsiveness */
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+      .hero { padding-top: 32px; }
+    }
+
+    /* Input cards and text fields */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+      transition: border-color 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .card h2 {
+      margin: 0 0 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+    }
+
+    .card h2.second {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .add-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 0;
+      padding: 13px 16px;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.98rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    input[type="text"]::placeholder {
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* Buttons and interactive states */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+
+    .btn-secondary {
+      background: var(--bg-main);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-color);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg-main);
+      font-size: 1.05rem;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(255,255,255,0.12);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255,255,255,0.2);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: wait;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Ingredient tags and chips */
+    .chips {
+      list-style: none;
+      padding: 0;
+      margin: 14px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chips li {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px 6px 14px;
+      background: #27272a;
+      color: var(--text-primary);
+      border: 1px solid #3f3f46;
+      border-radius: 999px;
+      font-weight: 500;
+      font-size: 0.88rem;
+      animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.2s ease;
+    }
+
+    .chips li:hover {
+      background: #3f3f46;
+      border-color: #52525b;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .chips button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      transition: all 0.15s ease;
+    }
+
+    .chips button:hover {
+      color: var(--accent);
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* File dropzone and preview components */
+    .drop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 26px 16px;
+      text-align: center;
+      border: 2px dashed var(--border-color);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .drop:hover, .drop.over {
+      border-color: var(--text-muted);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .drop-title {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .drop-sub {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .camera-btn {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .preview-box {
+      margin-top: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .preview-box img {
+      display: block;
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 0.88rem;
+      padding: 10px 0 0;
+      transition: color 0.2s ease;
+    }
+
+    .link-btn:hover {
+      color: #f87171;
+    }
+
+    /* Status indicators and empty states */
+    .status {
+      min-height: 1.4em;
+      margin: 16px 0 0;
+      font-size: 0.92rem;
+    }
+
+    .status.error {
+      color: #fca5a5;
+      background: rgba(239, 68, 68, 0.12);
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .state {
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      border: 1px dashed var(--border-color);
+      border-radius: 20px;
+      background: var(--bg-card);
+    }
+
+    .state-title {
+      margin: 20px 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .state-sub {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 32ch;
+    }
+
+    /* Loading spinner animation */
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner { animation-duration: 2s; }
+    }
+
+    /* Generated recipe card results */
+    .recipe-card {
+      background: var(--card-bg);
+      color: var(--card-text);
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.6);
+      animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.97) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .found {
+      margin: 0 0 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e4e4e7;
+      font-size: 0.9rem;
+      color: #52525b;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .recipe-card h3 {
+      margin: 0 0 16px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--card-text);
+      letter-spacing: -0.02em;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .pill {
+      border: 1px solid #18181b;
+      background: transparent;
+      color: #18181b;
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+    }
+
+    .cols {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 36px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e4e4e7;
+    }
+
+    @media (max-width: 700px) {
+      .cols { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    .recipe-card h4 {
+      margin: 0 0 14px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.2rem;
+      color: var(--card-text);
+    }
+
+    .ing {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .ing li {
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.95rem;
+      color: #27272a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ing li:last-child {
+      border-bottom: none;
+    }
+
+    .missing {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #09090b;
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: step-counter;
+    }
+
+    .steps li {
+      counter-increment: step-counter;
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      font-size: 0.98rem;
+      color: #27272a;
+      line-height: 1.55;
+    }
+
+    .steps li::before {
+      content: counter(step-counter);
+      flex: none;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      background: #09090b;
+      color: #ffffff;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    /* Footer and layout bottom */
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <header class="bar">
-    <span class="brand">Fridge to Meal</span>
+    <span class="brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2C19.1 2 20 2.9 20 4V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4C4 2.9 4.9 2 6 2H18ZM11 4H6V11H11V4ZM18 4H13V11H18V4ZM11 13H6V20H11V13ZM18 13H13V20H18V13Z"/></svg>
+      Fridge to Meal
+    </span>
   </header>
 
   <section class="hero">
@@ -17,7 +601,7 @@
   </section>
 
   <main class="layout">
-    <!-- Left: input -->
+    <!-- Left column: ingredient input and photo capture -->
     <section class="card input-card">
       <h2>Your ingredients</h2>
 
@@ -29,10 +613,10 @@
 
       <h2 class="second">Or add a photo</h2>
       <label id="drop" class="drop" for="upload-input" tabindex="0">
-        <svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
-          <rect x="5" y="12" width="38" height="28" rx="5" fill="none" stroke="#a1a1aa" stroke-width="3"/>
-          <path d="M17 12l3-5h8l3 5" fill="none" stroke="#a1a1aa" stroke-width="3" stroke-linejoin="round"/>
-          <circle cx="24" cy="26" r="7" fill="none" stroke="#ffffff" stroke-width="3"/>
+        <svg viewBox="0 0 48 48" width="36" height="36" aria-hidden="true">
+          <rect x="5" y="12" width="38" height="28" rx="6" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
+          <path d="M17 12l3-5h8l3 5" fill="none" stroke="#a1a1aa" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="24" cy="26" r="7" fill="none" stroke="#ffffff" stroke-width="2.5"/>
         </svg>
         <span class="drop-title">Choose a photo of your fridge</span>
         <span class="drop-sub">Click here or drag a picture in</span>
@@ -50,17 +634,17 @@
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
 
-    <!-- Right: output -->
+    <!-- Right column: generated output states -->
     <section class="output" aria-live="polite">
       <div id="empty" class="state">
-        <svg viewBox="0 0 120 160" width="96" height="128" aria-hidden="true">
-          <rect x="20" y="8" width="80" height="144" rx="10" fill="none" stroke="#a1a1aa" stroke-width="4"/>
-          <line x1="20" y1="58" x2="100" y2="58" stroke="#a1a1aa" stroke-width="4"/>
-          <rect x="84" y="24" width="5" height="22" rx="2.5" fill="#ffffff"/>
-          <rect x="84" y="72" width="5" height="36" rx="2.5" fill="#ffffff"/>
-          <circle cx="46" cy="132" r="11" fill="#52525b"/>
-          <rect x="62" y="120" width="14" height="24" rx="4" fill="#a1a1aa"/>
-          <circle cx="44" cy="94" r="8" fill="#e4e4e7"/>
+        <svg viewBox="0 0 120 160" width="88" height="118" aria-hidden="true">
+          <rect x="20" y="8" width="80" height="144" rx="12" fill="none" stroke="#52525b" stroke-width="3"/>
+          <line x1="20" y1="58" x2="100" y2="58" stroke="#52525b" stroke-width="3"/>
+          <rect x="84" y="24" width="4" height="20" rx="2" fill="#a1a1aa"/>
+          <rect x="84" y="72" width="4" height="32" rx="2" fill="#a1a1aa"/>
+          <circle cx="46" cy="132" r="10" fill="#3f3f46"/>
+          <rect x="62" y="122" width="14" height="20" rx="3" fill="#52525b"/>
+          <circle cx="44" cy="94" r="7" fill="#71717a"/>
         </svg>
         <p class="state-title">Your recipe shows up here</p>
         <p class="state-sub">Add a few ingredients, then press Find a recipe.</p>
@@ -78,7 +662,183 @@
 
   <footer>Recipes are generated by AI. Check allergies and cooking times yourself.</footer>
 
-  <script src="config.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // Embedded config.js
+    const GEMINI_API_KEY = "YOUR_API_KEY_HERE"; // Replace with your actual key if needed
+  </script>
+  <script>
+    // State management
+    let ingredients = [];
+    let imageBase64 = null;
+    let imageMimeType = null;
+
+    // DOM Elements
+    const ingredientInput = document.getElementById('ingredient-input');
+    const addBtn = document.getElementById('add-btn');
+    const chipsList = document.getElementById('chips');
+    
+    const dropZone = document.getElementById('drop');
+    const uploadInput = document.getElementById('upload-input');
+    const cameraInput = document.getElementById('camera-input');
+    const previewBox = document.getElementById('preview-box');
+    const previewImg = document.getElementById('preview');
+    const removePhotoBtn = document.getElementById('remove-photo');
+    
+    const generateBtn = document.getElementById('generate-btn');
+    const statusText = document.getElementById('status');
+    
+    // Output States
+    const emptyState = document.getElementById('empty');
+    const loadingState = document.getElementById('loading');
+    const resultState = document.getElementById('result');
+
+    // --- Ingredients Logic ---
+    
+    function renderChips() {
+      chipsList.innerHTML = '';
+      ingredients.forEach((ing, index) => {
+        const li = document.createElement('li');
+        li.textContent = ing;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.textContent = '×';
+        removeBtn.setAttribute('aria-label', `Remove ${ing}`);
+        removeBtn.onclick = () => {
+          ingredients.splice(index, 1);
+          renderChips();
+        };
+        
+        li.appendChild(removeBtn);
+        chipsList.appendChild(li);
+      });
+    }
+
+    function addIngredient() {
+      const val = ingredientInput.value.trim();
+      if (val && !ingredients.includes(val)) {
+        ingredients.push(val);
+        renderChips();
+        ingredientInput.value = '';
+        ingredientInput.focus();
+      }
+    }
+
+    addBtn.addEventListener('click', addIngredient);
+    ingredientInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addIngredient();
+    });
+
+    // --- Photo Logic ---
+
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) {
+        showError('Please select a valid image file.');
+        return;
+      }
+      
+      clearError();
+      imageMimeType = file.type;
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Extract base64 data without the data URL prefix
+        const result = e.target.result;
+        imageBase64 = result.split(',')[1]; 
+        
+        previewImg.src = result;
+        previewBox.hidden = false;
+        dropZone.hidden = true;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    uploadInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+    cameraInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+    removePhotoBtn.addEventListener('click', () => {
+      imageBase64 = null;
+      imageMimeType = null;
+      previewBox.hidden = true;
+      dropZone.hidden = false;
+      uploadInput.value = '';
+      cameraInput.value = '';
+    });
+
+    // Drag and Drop
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('over');
+    });
+    
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('over');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('over');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    // Make label keyboard accessible
+    dropZone.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        uploadInput.click();
+      }
+    });
+
+    // --- UI Helpers ---
+
+    function showState(state) {
+      emptyState.hidden = state !== 'empty';
+      loadingState.hidden = state !== 'loading';
+      resultState.hidden = state !== 'result';
+    }
+
+    function showError(msg) {
+      statusText.textContent = msg;
+      statusText.className = 'status error';
+    }
+    
+    function clearError() {
+      statusText.textContent = '';
+      statusText.className = 'status';
+    }
+
+    function disableUI(disabled) {
+      ingredientInput.disabled = disabled;
+      addBtn.disabled = disabled;
+      generateBtn.disabled = disabled;
+      removePhotoBtn.disabled = disabled;
+      const chipButtons = chipsList.querySelectorAll('button');
+      chipButtons.forEach(btn => btn.disabled = disabled);
+    }
+
+    // --- Generation Logic ---
+
+    // Note: The actual API call logic will be added when we connect to Gemini.
+    // This is just a placeholder to show the loading state transition for now.
+    generateBtn.addEventListener('click', () => {
+       if (ingredients.length === 0 && !imageBase64) {
+           showError('Please add at least one ingredient or a photo.');
+           return;
+       }
+
+       clearError();
+       showState('loading');
+       disableUI(true);
+
+       // Placeholder timeout to simulate API call
+       setTimeout(() => {
+           // We will render the real result here later
+           showState('result');
+           disableUI(false);
+       }, 2000);
+    });
+  </script>
 </body>
 </html>
