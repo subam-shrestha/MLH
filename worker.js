@@ -60,18 +60,33 @@ export default {
       return jsonResponse({ error: "A prompt is required." }, 400, origin);
     }
 
-    try {
-      const upstream = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(env.GEMINI_MODEL || "gemini-3.8-flash")}:generateContent`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": env.GEMINI_API_KEY,
+    const models = [...new Set([
+      env.GEMINI_MODEL || "gemini-3.8-flash",
+      "gemini-3.7-flash",
+      "gemini-3.6-flash",
+      "gemini-3.5-flash",
+    ])];
+
+    for (const model of models) {
+      let upstream;
+      try {
+        upstream = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": env.GEMINI_API_KEY,
+            },
+            body: JSON.stringify(payload),
           },
-          body: JSON.stringify(payload),
-        },
-      );
+        );
+      } catch {
+        return jsonResponse({ error: "Could not reach the Gemini API." }, 502, origin);
+      }
+
+      if (!upstream.ok && upstream.status === 503) continue;
+
       return new Response(await upstream.arrayBuffer(), {
         status: upstream.status,
         headers: {
@@ -79,8 +94,8 @@ export default {
           "Content-Type": upstream.headers.get("Content-Type") || "application/json",
         },
       });
-    } catch {
-      return jsonResponse({ error: "Could not reach the Gemini API." }, 502, origin);
     }
+
+    return jsonResponse({ error: "All Gemini models are currently unavailable. Try again shortly." }, 503, origin);
   },
 };
