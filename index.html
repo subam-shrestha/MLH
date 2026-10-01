@@ -8,10 +8,7 @@
 </head>
 <body>
   <header class="bar">
-    <span class="brand">
-      <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2C19.1 2 20 2.9 20 4V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4C4 2.9 4.9 2 6 2H18ZM11 4H6V11H11V4ZM18 4H13V11H18V4ZM11 13H6V20H11V13ZM18 13H13V20H18V13Z"/></svg>
-      Fridge to Meal
-    </span>
+    <span class="brand">Fridge to Meal</span>
   </header>
 
   <section class="hero">
@@ -20,7 +17,7 @@
   </section>
 
   <main class="layout">
-    <!-- Left column: ingredient input and photo capture -->
+    <!-- Left: input -->
     <section class="card input-card">
       <h2>Your ingredients</h2>
 
@@ -32,10 +29,10 @@
 
       <h2 class="second">Or add a photo</h2>
       <label id="drop" class="drop" for="upload-input" tabindex="0">
-        <svg viewBox="0 0 48 48" width="36" height="36" aria-hidden="true">
-          <rect x="5" y="12" width="38" height="28" rx="6" fill="none" stroke="#a1a1aa" stroke-width="2.5"/>
-          <path d="M17 12l3-5h8l3 5" fill="none" stroke="#a1a1aa" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="24" cy="26" r="7" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+        <svg viewBox="0 0 48 48" width="40" height="40" aria-hidden="true">
+          <rect x="5" y="12" width="38" height="28" rx="5" fill="none" stroke="#a1a1aa" stroke-width="3"/>
+          <path d="M17 12l3-5h8l3 5" fill="none" stroke="#a1a1aa" stroke-width="3" stroke-linejoin="round"/>
+          <circle cx="24" cy="26" r="7" fill="none" stroke="#ffffff" stroke-width="3"/>
         </svg>
         <span class="drop-title">Choose a photo of your fridge</span>
         <span class="drop-sub">Click here or drag a picture in</span>
@@ -53,17 +50,17 @@
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
 
-    <!-- Right column: generated output states -->
+    <!-- Right: output -->
     <section class="output" aria-live="polite">
       <div id="empty" class="state">
-        <svg viewBox="0 0 120 160" width="88" height="118" aria-hidden="true">
-          <rect x="20" y="8" width="80" height="144" rx="12" fill="none" stroke="#52525b" stroke-width="3"/>
-          <line x1="20" y1="58" x2="100" y2="58" stroke="#52525b" stroke-width="3"/>
-          <rect x="84" y="24" width="4" height="20" rx="2" fill="#a1a1aa"/>
-          <rect x="84" y="72" width="4" height="32" rx="2" fill="#a1a1aa"/>
-          <circle cx="46" cy="132" r="10" fill="#3f3f46"/>
-          <rect x="62" y="122" width="14" height="20" rx="3" fill="#52525b"/>
-          <circle cx="44" cy="94" r="7" fill="#71717a"/>
+        <svg viewBox="0 0 120 160" width="96" height="128" aria-hidden="true">
+          <rect x="20" y="8" width="80" height="144" rx="10" fill="none" stroke="#a1a1aa" stroke-width="4"/>
+          <line x1="20" y1="58" x2="100" y2="58" stroke="#a1a1aa" stroke-width="4"/>
+          <rect x="84" y="24" width="5" height="22" rx="2.5" fill="#ffffff"/>
+          <rect x="84" y="72" width="5" height="36" rx="2.5" fill="#ffffff"/>
+          <circle cx="46" cy="132" r="11" fill="#52525b"/>
+          <rect x="62" y="120" width="14" height="24" rx="4" fill="#a1a1aa"/>
+          <circle cx="44" cy="94" r="8" fill="#e4e4e7"/>
         </svg>
         <p class="state-title">Your recipe shows up here</p>
         <p class="state-sub">Add a few ingredients, then press Find a recipe.</p>
