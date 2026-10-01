@@ -161,7 +161,16 @@ async function askGemini() {
 
   if (!res.ok) {
     if (res.status === 429) throw new Error("Too many requests right now. Wait a minute and try again.");
-    throw new Error("Server returned an error (" + res.status + "). Try again.");
+    let detail = "";
+    try {
+      const errorData = await res.json();
+      detail = typeof errorData.error === "string"
+        ? errorData.error
+        : errorData.error?.message || "";
+    } catch {
+      // Keep the status-based message when the server doesn't return JSON.
+    }
+    throw new Error(detail || "Server returned an error (" + res.status + "). Try again.");
   }
 
   const data = await res.json();
