@@ -1,1 +1,1 @@
-const GEMINI_API_URL_CONFIG = "https://mlh-gemini-proxy.jexuxedn6348.workers.dev/api/generate";
+const GEMINI_PROXY_URL = "https://mlh-gemini-proxy.jexuxedn6348.workers.dev/api/generate";

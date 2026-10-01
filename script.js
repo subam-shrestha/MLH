@@ -1,5 +1,3 @@
-const GEMINI_API_URL = GEMINI_API_URL_CONFIG;
-
 const input = document.getElementById("ingredient-input");
 const addBtn = document.getElementById("add-btn");
 const chipsEl = document.getElementById("chips");
@@ -141,7 +139,7 @@ If no food can be identified, set "error" to a short explanation and leave the r
 }
 
 async function askGemini() {
-  if (!GEMINI_API_URL || GEMINI_API_URL.includes("YOUR-CLOUDFLARE-SUBDOMAIN")) {
+  if (typeof GEMINI_PROXY_URL === "undefined" || !GEMINI_PROXY_URL) {
     throw new Error("Configure the recipe service URL in config.js before generating a recipe.");
   }
 
@@ -150,9 +148,11 @@ async function askGemini() {
     parts.push({ inline_data: { mime_type: "image/jpeg", data: photoBase64 } });
   }
 
-  const res = await fetch(GEMINI_API_URL, {
+  const res = await fetch(GEMINI_PROXY_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({
       contents: [{ parts }],
       generationConfig: { responseMimeType: "application/json", temperature: 0.7 },
@@ -161,8 +161,7 @@ async function askGemini() {
 
   if (!res.ok) {
     if (res.status === 429) throw new Error("Too many requests right now. Wait a minute and try again.");
-    if (res.status === 400 || res.status === 403) throw new Error("The recipe service rejected the request. Check the Worker configuration.");
-    throw new Error("Gemini returned an error (" + res.status + "). Try again.");
+    throw new Error("Server returned an error (" + res.status + "). Try again.");
   }
 
   const data = await res.json();
